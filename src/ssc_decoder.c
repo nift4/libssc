@@ -17,11 +17,6 @@
 #define DB_SHIFT 10
 #define NEG28 ((opus_val16)(-28 * (1 << DB_SHIFT)))
 
-#ifdef SSC_DEBUG_TELL
-/* Debug: bits consumed vs budget of the last frame (host tests only). */
-int ssc_debug_tell, ssc_debug_total_bits, ssc_debug_storage_bits;
-#endif
-
 #ifdef SSC_PROFILE
 /* Stage markers for benchmarking (0 = frame start, then one call per finished stage). */
 void ssc_prof_mark(int stage);
@@ -321,11 +316,6 @@ static int decode_frame(ssc_decoder *st, const uint8_t *frame, int len) {
         for (i = 0; i < C * NB; i++)
             if (logE[i] < st->oldLogE[i]) st->oldLogE[i] = logE[i];
     }
-#ifdef SSC_DEBUG_TELL
-    ssc_debug_tell = ec_tell(&dec);
-    ssc_debug_total_bits = total_bits;
-    ssc_debug_storage_bits = (int)dec.storage * 8;
-#endif
     st->rng = dec.rng;
     return dec.error ? -2 : 0;
 }
