@@ -3,9 +3,9 @@ exec_prefix=${prefix}
 libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
 includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
 
-Name: libssc
+Name: libscalablecodec
 Description: SSC library
 Version: @PROJECT_VERSION@
-Libs: -L${libdir} -lssc
+Libs: -L${libdir} -lscalablecodec
 Libs.private: -lm
 Cflags: -I${includedir}

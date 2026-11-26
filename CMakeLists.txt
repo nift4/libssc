@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
-project(ssc VERSION 1.0.0 LANGUAGES C)
+project(scalablecodec VERSION 1.0.0 LANGUAGES C)
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-option(ssc_BUILD_EXAMPLES "Build the command-line tools" OFF)
+option(scalablecodec_BUILD_EXAMPLES "Build the command-line tools" OFF)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -20,7 +20,7 @@ endif()
 
 find_library(MATH_LIBRARY m)
 
-add_library(ssc
+add_library(scalablecodec
   src/ssc_encoder.c
   src/ssc_enc_analysis.c
   src/ssc_enc_alloc.c
@@ -39,24 +39,24 @@ add_library(ssc
   src/ssc_synth.c
   src/ssc_tables.c
   src/ssc_twiddle.c)
-target_include_directories(ssc PUBLIC
+target_include_directories(scalablecodec PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 if(MATH_LIBRARY)
-  target_link_libraries(ssc PUBLIC ${MATH_LIBRARY})
+  target_link_libraries(scalablecodec PUBLIC ${MATH_LIBRARY})
 endif()
 
-if(ssc_BUILD_EXAMPLES)
+if(scalablecodec_BUILD_EXAMPLES)
   add_executable(ssc_enc_tool examples/ssc_enc_tool.c)
-  target_link_libraries(ssc_enc_tool ssc)
+  target_link_libraries(ssc_enc_tool scalablecodec)
   add_executable(ssc_roundtrip examples/ssc_roundtrip.c)
-  target_link_libraries(ssc_roundtrip ssc)
+  target_link_libraries(ssc_roundtrip scalablecodec)
 endif()
 
 
-install(TARGETS ssc
-  EXPORT sscTargets
+install(TARGETS scalablecodec
+  EXPORT scalablecodecTargets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
@@ -67,36 +67,36 @@ install(DIRECTORY include/
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-install(EXPORT sscTargets
-  FILE sscTargets.cmake
-  NAMESPACE ssc::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ssc
+install(EXPORT scalablecodecTargets
+  FILE scalablecodecTargets.cmake
+  NAMESPACE scalablecodec::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scalablecodec
 )
 
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sscConfig.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/sscConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ssc
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/scalablecodecConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/scalablecodecConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scalablecodec
 )
 
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/sscConfigVersion.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/scalablecodecConfigVersion.cmake
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion
 )
 
 install(FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/sscConfig.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/sscConfigVersion.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ssc
+  ${CMAKE_CURRENT_BINARY_DIR}/scalablecodecConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/scalablecodecConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/scalablecodec
 )
 
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/libssc.pc.in
-  ${CMAKE_CURRENT_BINARY_DIR}/libssc.pc
+  ${CMAKE_CURRENT_SOURCE_DIR}/libscalablecodec.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/libscalablecodec.pc
   @ONLY
 )
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libssc.pc
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libscalablecodec.pc
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
 )
